@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
-import { FaUsers, FaEye, FaHeart } from 'react-icons/fa'; // Import icons for stats
-import CountUp from 'react-countup'; // Import CountUp
+import { FaUsers, FaEye, FaHeart } from 'react-icons/fa';
+import CountUp from 'react-countup'; // Make sure to install this package
 
 export default function Home() {
   const [placeId, setPlaceId] = useState('');
@@ -29,13 +29,13 @@ export default function Home() {
     if (gameInfo) {
       interval = setInterval(() => {
         fetchGameInfo();
-      }, 5000); // Update every 5 seconds
+      }, 5000);
     }
     return () => clearInterval(interval);
   }, [gameInfo]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-200 flex flex-col items-center justify-center">
       <Head>
         <title>Roblox Game Visitor Stats</title>
         <link rel="icon" href="/favicon.ico" />
@@ -73,38 +73,29 @@ export default function Home() {
         )}
 
         {gameInfo && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">{gameInfo.name}</h2>
-            <div className="grid grid-cols-1 gap-6">
-              <div className="bg-indigo-100 p-6 rounded-xl flex items-center justify-between">
-                <div className="text-left">
-                  <p className="text-lg font-medium text-gray-600">Live Player Count</p>
-                  <p className="text-4xl font-extrabold text-indigo-700">
-                    <CountUp end={gameInfo.playing} duration={2} />
-                  </p>
-                </div>
-                <FaUsers className="text-4xl text-indigo-600" />
+          <div className="mt-8 grid grid-cols-1 gap-4">
+            <div className="bg-indigo-100 p-6 rounded-xl flex items-center justify-between">
+              <div className="text-left">
+                <p className="text-lg font-medium text-gray-600">Live Player Count</p>
+                <CountUp start={0} end={gameInfo.playing} duration={1} delay={0} className="text-4xl font-extrabold text-indigo-700" />
               </div>
+              <FaUsers className="text-4xl text-indigo-600" />
+            </div>
 
-              <div className="bg-green-100 p-6 rounded-xl flex items-center justify-between">
-                <div className="text-left">
-                  <p className="text-lg font-medium text-gray-600">Total Visits</p>
-                  <p className="text-4xl font-extrabold text-green-700">
-                    <CountUp end={gameInfo.visits} duration={2} />
-                  </p>
-                </div>
-                <FaEye className="text-4xl text-green-600" />
+            <div className="bg-green-100 p-6 rounded-xl flex items-center justify-between">
+              <div className="text-left">
+                <p className="text-lg font-medium text-gray-600">Total Visits</p>
+                <CountUp start={0} end={gameInfo.visits} duration={1} delay={0} className="text-4xl font-extrabold text-green-700" />
               </div>
+              <FaEye className="text-4xl text-green-600" />
+            </div>
 
-              <div className="bg-yellow-100 p-6 rounded-xl flex items-center justify-between">
-                <div className="text-left">
-                  <p className="text-lg font-medium text-gray-600">Favorites</p>
-                  <p className="text-4xl font-extrabold text-yellow-600">
-                    <CountUp end={gameInfo.favoritedCount} duration={2} />
-                  </p>
-                </div>
-                <FaHeart className="text-4xl text-yellow-600" />
+            <div className="bg-yellow-100 p-6 rounded-xl flex items-center justify-between">
+              <div className="text-left">
+                <p className="text-lg font-medium text-gray-600">Favorites</p>
+                <CountUp start={0} end={gameInfo.favoritedCount} duration={1} delay={0} className="text-4xl font-extrabold text-yellow-600" />
               </div>
+              <FaHeart className="text-4xl text-yellow-600" />
             </div>
           </div>
         )}
