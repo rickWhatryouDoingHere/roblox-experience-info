@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
 import { FaUsers, FaEye, FaHeart } from 'react-icons/fa';
-import CountUp from 'react-countup'; // Make sure to install this package
+import CountUp from 'react-countup';
 
 export default function Home() {
   const [placeId, setPlaceId] = useState('');
@@ -35,34 +35,34 @@ export default function Home() {
   }, [gameInfo]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-200 flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-300 flex flex-col items-center justify-center py-10">
       <Head>
         <title>Roblox Game Visitor Stats</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="bg-white shadow-2xl rounded-2xl p-8 max-w-lg w-full">
-        <h1 className="text-4xl font-extrabold text-center mb-8 text-gray-900">
+      <main className="bg-white shadow-lg rounded-2xl p-8 max-w-lg w-full mx-4">
+        <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">
           Roblox Game Stats
         </h1>
         
-        <p className="text-center text-lg text-gray-500 mb-6">
+        <p className="text-center text-md text-gray-600 mb-4">
           Enter the Place ID to view live statistics of your favorite Roblox game!
         </p>
         
-        <div className="relative mb-6">
+        <div className="relative mb-4">
           <input
             type="text"
             value={placeId}
             onChange={(e) => setPlaceId(e.target.value)}
             placeholder="Enter Place ID"
-            className="w-full border border-gray-300 p-4 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-lg placeholder-gray-400"
+            className="w-full border border-gray-300 p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md text-lg placeholder-gray-400"
           />
         </div>
 
         <button
           onClick={fetchGameInfo}
-          className="w-full bg-indigo-600 text-white p-4 rounded-full font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition duration-300 ease-in-out shadow-lg"
+          className={`w-full bg-blue-600 text-white p-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300 ease-in-out shadow-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Get Info'}
@@ -73,35 +73,25 @@ export default function Home() {
         )}
 
         {gameInfo && (
-          <div className="mt-8 grid grid-cols-1 gap-4">
-            <div className="bg-indigo-100 p-6 rounded-xl flex items-center justify-between">
-              <div className="text-left">
-                <p className="text-lg font-medium text-gray-600">Live Player Count</p>
-                <CountUp start={0} end={gameInfo.playing} duration={1} delay={0} className="text-4xl font-extrabold text-indigo-700" />
+          <div className="mt-6 grid grid-cols-1 gap-4">
+            {[
+              { label: 'Live Player Count', value: gameInfo.playing, icon: <FaUsers className="text-blue-600" /> },
+              { label: 'Total Visits', value: gameInfo.visits, icon: <FaEye className="text-green-600" /> },
+              { label: 'Favorites', value: gameInfo.favoritedCount, icon: <FaHeart className="text-yellow-600" /> },
+            ].map(({ label, value, icon }, index) => (
+              <div key={index} className="bg-gray-100 p-6 rounded-lg flex items-center justify-between shadow-sm transition-transform transform hover:scale-105">
+                <div className="text-left">
+                  <p className="text-md font-medium text-gray-700">{label}</p>
+                  <CountUp start={0} end={value} duration={1} delay={0} className="text-3xl font-bold text-gray-800" />
+                </div>
+                <div className="text-4xl">{icon}</div>
               </div>
-              <FaUsers className="text-4xl text-indigo-600" />
-            </div>
-
-            <div className="bg-green-100 p-6 rounded-xl flex items-center justify-between">
-              <div className="text-left">
-                <p className="text-lg font-medium text-gray-600">Total Visits</p>
-                <CountUp start={0} end={gameInfo.visits} duration={1} delay={0} className="text-4xl font-extrabold text-green-700" />
-              </div>
-              <FaEye className="text-4xl text-green-600" />
-            </div>
-
-            <div className="bg-yellow-100 p-6 rounded-xl flex items-center justify-between">
-              <div className="text-left">
-                <p className="text-lg font-medium text-gray-600">Favorites</p>
-                <CountUp start={0} end={gameInfo.favoritedCount} duration={1} delay={0} className="text-4xl font-extrabold text-yellow-600" />
-              </div>
-              <FaHeart className="text-4xl text-yellow-600" />
-            </div>
+            ))}
           </div>
         )}
       </main>
 
-      <footer className="mt-8 text-center text-gray-500 text-sm">
+      <footer className="mt-6 text-center text-gray-500 text-sm">
         <p>&copy; {new Date().getFullYear()} Roblox Stats. All rights reserved.</p>
         <p>Built with ❤️ for Roblox fans.</p>
       </footer>
