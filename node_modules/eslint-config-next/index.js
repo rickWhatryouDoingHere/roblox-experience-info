@@ -30,12 +30,13 @@ sortedPaths.push(...keptPaths)
 
 const hookPropertyMap = new Map(
   [
-    ['eslint-plugin-import', 'eslint-plugin-import'],
-    ['eslint-plugin-react', 'eslint-plugin-react'],
-    ['eslint-plugin-jsx-a11y', 'eslint-plugin-jsx-a11y'],
-  ].map(([request, replacement]) => [
+    '@typescript-eslint/eslint-plugin',
+    'eslint-plugin-import',
+    'eslint-plugin-react',
+    'eslint-plugin-jsx-a11y',
+  ].map((request) => [
     request,
-    require.resolve(replacement, { paths: sortedPaths }),
+    require.resolve(request, { paths: sortedPaths }),
   ])
 )
 
@@ -60,6 +61,7 @@ module.exports = {
   plugins: ['import', 'react', 'jsx-a11y'],
   rules: {
     'import/no-anonymous-default-export': 'warn',
+    'react/no-unknown-property': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'jsx-a11y/alt-text': [
@@ -74,6 +76,7 @@ module.exports = {
     'jsx-a11y/aria-unsupported-elements': 'warn',
     'jsx-a11y/role-has-required-aria-props': 'warn',
     'jsx-a11y/role-supports-aria-props': 'warn',
+    'react/jsx-no-target-blank': 'off',
   },
   parser: './parser.js',
   parserOptions: {
@@ -94,10 +97,6 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       parserOptions: {
         sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
-        warnOnUnsupportedTypeScriptVersion: true,
       },
     },
   ],
@@ -106,7 +105,13 @@ module.exports = {
       version: 'detect',
     },
     'import/parsers': {
-      [require.resolve('@typescript-eslint/parser')]: ['.ts', '.tsx', '.d.ts'],
+      [require.resolve('@typescript-eslint/parser')]: [
+        '.ts',
+        '.mts',
+        '.cts',
+        '.tsx',
+        '.d.ts',
+      ],
     },
     'import/resolver': {
       [require.resolve('eslint-import-resolver-node')]: {
